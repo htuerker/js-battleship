@@ -4,7 +4,7 @@
   "description": "My webpack project",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watch ./test/*.js",
+    "test": "jest --watch *.js",
     "build": "webpack",
     "start": "webpack-dev-server"
   },
@@ -30,6 +30,7 @@
     "eslint-plugin-import": "^2.18.0",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^24.8.0",
+    "jest-webpack": "^0.5.1",
     "node-sass": "^4.12.0",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",

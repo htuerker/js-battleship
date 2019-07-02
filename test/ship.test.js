@@ -10,7 +10,7 @@ describe('#constructor', () => {
   });
 
   it('should assign hp', () => {
-    const ship = new Ship(4, 0);
+    const ship = new Ship(4, { x: 0, y: 0 }, 0);
     expect(ship.hp).toBe(ship.length);
   });
 });
@@ -18,7 +18,7 @@ describe('#constructor', () => {
 // hit method
 describe('#hit', () => {
   it('should decrease hp', () => {
-    const ship = new Ship(4, 0);
+    const ship = new Ship(4, { x: 0, y: 0 }, 0);
     expect(ship.hp).toBe(4);
     ship.hit();
     expect(ship.hp).toBe(3);
@@ -28,7 +28,7 @@ describe('#hit', () => {
 
 describe('#isSunk', () => {
   it('should return true if hp = 0', () => {
-    const ship = new Ship(1, 0);
+    const ship = new Ship(1, { x: 0, y: 0 }, 0);
     expect(ship.isSunk()).toBeFalsy();
     ship.hit();
     expect(ship.isSunk()).toBeTruthy();

@@ -2,13 +2,9 @@ import Ship from './ship';
 
 export default class Board {
     constructor() {
-        this.grid = new Array(10);
-        for (let i = 0; i < 10; i++) {
-            this.grid[i] = new Array(10);
-            for (let j = 0; j < 10; j++) {
-                this.grid[i][j] = { hit: false, ship: null};
-            }
-        }
+        this.grid = Array.from(Array(10), () =>
+            Array.from(Array(10), () => ({ hit: false, ship: null }))
+        );
         this.ships = 7;
     }
 

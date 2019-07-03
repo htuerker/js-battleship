@@ -14,16 +14,31 @@ function allowDropShip(ev) {
 
 function dropShip(ev, board) {
   const data = ev.dataTransfer.getData('id');
+  console.log(data)
   const shipDiv = document.getElementById(data);
   if (board) {
-    const x = parseInt(ev.srcElement.attributes.x.value, 10);
-    const y = parseInt(ev.srcElement.attributes.y.value, 10);
+      console.log(ev.srcElement)
+      let x;
+      let y;
+    if (ev.srcElement.classList.contains('cell')) {
+        x = parseInt(ev.srcElement.attributes.x.value, 10);
+        y = parseInt(ev.srcElement.attributes.y.value, 10);
+    } else {
+        x = parseInt(ev.srcElement.parentElement.attributes.x.value, 10);
+        y = parseInt(ev.srcElement.parentElement.attributes.y.value, 10);
+    }
     const length = parseInt(shipDiv.getAttribute('length'), 10);
-    board.placeShip(x, y, length, true);
     if (board.grid[y][x].ship) {
-      ev.target.appendChild(shipDiv);
-      console.log(`ship placed at x:${x} y:${y}`);
-      console.log(board.grid);
+        document.querySelector('.dock').appendChild(shipDiv);
+    } else {
+        board.placeShip(x, y, length, true);
+        if (board.grid[y][x].ship) {
+          ev.target.appendChild(shipDiv);
+          console.log(`ship placed at x:${x} y:${y}`);
+          console.log(board.grid);
+        } else {
+          document.querySelector('.dock').appendChild(shipDiv);
+        }
     }
   } else {
     ev.target.appendChild(shipDiv);
@@ -50,6 +65,7 @@ function initMainPage(game) {
   for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
       const cell = document.createElement('div');
+      cell.className = 'cell';
       cell.setAttribute('x', j);
       cell.setAttribute('y', i);
       cell.addEventListener('drop', () => dropShip(event, game.p1.board));

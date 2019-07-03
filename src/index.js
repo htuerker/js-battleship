@@ -1,4 +1,5 @@
-import Ship from './ship';
+import { initMainPage } from './dom-util';
 
-console.log(new Ship());
-console.log('Hello World from your main file!');
+((function init() {
+  initMainPage();
+})());

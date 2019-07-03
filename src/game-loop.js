@@ -1,8 +1,7 @@
 export default class GameLoop {
-  constructor(p1, p2, board) {
+  constructor(p1, p2) {
     this.p1 = p1;
     this.p2 = p2;
-    this.board = board;
     this.currentPlayer = p1;
     this.isStarted = false;
     this.isOver = false;
@@ -13,13 +12,14 @@ export default class GameLoop {
   }
 
   makeMove(x, y) {
+    const opponent = (
+      (this.currentPlayer === this.p1) ? this.p2 : this.p1);
+
     if (this.isStarted && !this.isOver) {
-      if (!this.board.isHit(x, y)) {
-        this.board.receiveAttack(x, y);
-        if (!this.board.isShip(x, y)) {
-          this.currentPlayer = (
-            this.currentPlayer === this.p1 ? this.p2 : this.p1);
-          // dom.hitShip(x, y);
+      if (!opponent.board.isHit(x, y)) {
+        opponent.board.receiveAttack(x, y);
+        if (!opponent.board.isShip(x, y)) {
+          this.currentPlayer = opponent;
         } else {
           // dom.hitWater(x, y);
         }

@@ -1,39 +1,69 @@
-function initMainPage() {
+function dragShip(ev, board) {
+  const ourBoard = document.getElementById('our-board');
+  if (ev.target.parentElement.parentElement === ourBoard) {
+    const x = parseInt(ev.srcElement.parentElement.attributes.x.value, 10);
+    const y = parseInt(ev.srcElement.parentElement.attributes.y.value, 10);
+    board.removeShip(x, y);
+  }
+  ev.dataTransfer.setData('id', ev.target.id);
+}
+
+function allowDropShip(ev) {
+  ev.preventDefault();
+}
+
+function dropShip(ev, board) {
+  const data = ev.dataTransfer.getData('id');
+  const shipDiv = document.getElementById(data);
+  if (board) {
+    const x = parseInt(ev.srcElement.attributes.x.value, 10);
+    const y = parseInt(ev.srcElement.attributes.y.value, 10);
+    const length = parseInt(shipDiv.getAttribute('length'), 10);
+    board.placeShip(x, y, length, true);
+    if (board.grid[y][x].ship) {
+      ev.target.appendChild(shipDiv);
+      console.log(`ship placed at x:${x} y:${y}`);
+      console.log(board.grid);
+    }
+  } else {
+    ev.target.appendChild(shipDiv);
+  }
+  ev.preventDefault();
+}
+
+function initMainPage(game) {
   const body = document.querySelector('body');
   const content = document.createElement('div');
   content.className = 'content';
   body.appendChild(content);
 
-  const board1 = document.createElement('div');
-  board1.className = 'board';
+  const ourBoard = document.createElement('div');
+  ourBoard.className = 'board';
+  ourBoard.setAttribute('id', 'our-board');
   const board2 = document.createElement('div');
   board2.className = 'board';
   const dock = document.createElement('div');
   dock.className = 'dock';
-  dock.addEventListener('drop', () => drop(event));
-  dock.addEventListener('dragover', () => allowDrop(event));
+  dock.addEventListener('drop', () => dropShip(event));
+  dock.addEventListener('dragover', () => allowDropShip(event));
 
   for (let i = 0; i < 10; i++) {
-      for (let j = 0; j < 10; j++) {
-          let board1Cell = document.createElement('div');
-          let board2Cell = document.createElement('div');
-          board1Cell.setAttribute('x', j);
-          board1Cell.setAttribute('y', i);
-          board1Cell.addEventListener('drop', () => drop(event));
-          board1Cell.addEventListener('dragover', () => allowDrop(event));
-          board2Cell.setAttribute('x', j);
-          board2Cell.setAttribute('y', i);
-          board1.appendChild(board1Cell);
-          board2.appendChild(board2Cell);
-      }
+    for (let j = 0; j < 10; j++) {
+      const cell = document.createElement('div');
+      cell.setAttribute('x', j);
+      cell.setAttribute('y', i);
+      cell.addEventListener('drop', () => dropShip(event, game.p1.board));
+      cell.addEventListener('dragover', () => allowDropShip(event));
+      ourBoard.appendChild(cell);
+    }
   }
 
   const ship1 = document.createElement('div');
   ship1.id = 'ship1';
   ship1.className = 'ship1';
-  ship1.setAttribute('length', '3');
+  ship1.setAttribute('length', '1');
   ship1.setAttribute('draggable', 'true');
-  ship1.addEventListener('dragstart', () => drag(event));
+  ship1.addEventListener('dragstart', () => dragShip(event, game.p1.board));
   dock.appendChild(ship1);
 
   const ship2 = document.createElement('div');
@@ -41,26 +71,12 @@ function initMainPage() {
   ship2.className = 'ship2';
   ship2.setAttribute('length', '2');
   ship2.setAttribute('draggable', 'true');
-  ship2.addEventListener('dragstart', () => drag(event));
+  ship2.addEventListener('dragstart', () => dragShip(event, game.p1.board));
   dock.appendChild(ship2);
 
   content.appendChild(dock);
-  content.appendChild(board1);
+  content.appendChild(ourBoard);
   content.appendChild(board2);
 }
 
-function drag(ev) {
-  ev.dataTransfer.setData("id", ev.target.id);
-}
-
-function allowDrop(ev) {
-  ev.preventDefault();
-}
-
-function drop(ev) {
-  ev.preventDefault();
-  let data = ev.dataTransfer.getData("id");
-  ev.target.appendChild(document.getElementById(data));
-}
-
-export { initMainPage };
+export {initMainPage};

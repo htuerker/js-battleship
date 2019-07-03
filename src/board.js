@@ -23,6 +23,17 @@ export default class Board {
     }
   }
 
+  removeShip(x, y) {
+    const ship = this.grid[y][x].ship;
+    for (let i = 0; i < ship.length; i++) {
+      if (ship.horizontal) {
+        this.grid[y][x + i].ship = null;
+      } else {
+        this.grid[y + i][x].ship = null;
+      }
+    }
+  }
+
   receiveAttack(x, y) {
     const target = this.grid[y][x];
     target.hit = true;

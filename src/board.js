@@ -16,11 +16,13 @@ export default class Board {
         positions.push([x, y + i]);
       }
     }
+    let ship;
     if (positions.every(pos => this.isAvailable(pos))) {
-      const ship = new Ship(length, { x, y }, horizontal);
+      ship = new Ship(length, { x, y }, horizontal);
       positions.forEach((pos) => { this.grid[pos[1]][pos[0]].ship = ship; });
       this.ships += 1;
     }
+    return ship;
   }
 
   removeShip(x, y) {
@@ -66,6 +68,18 @@ export default class Board {
       return false;
     }
     return true;
+  }
+
+  isValid(x, y, length, horizontal) {
+    const positions = [];
+    for (let i = 0; i < length; i++) {
+      if (horizontal) {
+        positions.push([x + i, y]);
+      } else {
+        positions.push([x, y + i]);
+      }
+    }
+    return positions.every(pos => this.isAvailable(pos))
   }
 
   isHit(x, y) {

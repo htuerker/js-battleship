@@ -1,8 +1,9 @@
+
 import './styles.scss';
 import GameLoop from './game-loop';
 import Player from './player';
 import Board from './board';
-import { initMainPage } from './dom-util';
+import {initMainPage} from './dom-util';
 
 ((function init() {
   const p1Board = new Board();

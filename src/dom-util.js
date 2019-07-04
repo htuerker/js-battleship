@@ -11,54 +11,68 @@ function createShip(length) {
   return shipSpot;
 }
 
-function createBoard(game) {
-    const board = document.createElement('div');
-    board.className = 'board';
-    for (let i = 0; i < 10; i++) {
-      for (let j = 0; j < 10; j++) {
-        const cell = document.createElement('div');
-        if (game) {
-            cell.className = 'cell';
-            cell.addEventListener('click', () => {
-                game.makeMove(j, i);
-                console.log(game.p2.board.grid)
-                toggleBoard(game, board);
-                if (!game.currentPlayer.human) {
-                    while (!game.currentPlayer.human) {
-                        game.randomMove();
-                        console.log(game.p1.board.grid)
-                    }
-                    toggleBoard(game, board);
-                }
-            });
-        } else {
-            cell.className = 'cell dropzone';
-        }
-        cell.setAttribute('data-x', j);
-        cell.setAttribute('data-y', i);
-        board.appendChild(cell);
-      }
-    }
-
-    return board;
+function disableBoard(board) {
+  board.childNodes.forEach((e) => e.style.pointerEvents = 'none');
 }
 
-function toggleBoard(game, board) {
-    if (game.currentPlayer == game.p2) {
-        board.childNodes.forEach((e) => e.style.pointerEvents = 'none');
-    } else {
-        board.childNodes.forEach((e) => e.style.pointerEvents = 'auto');
+function enableBoard(board) {
+  board.childNodes.forEach((e) => e.style.pointerEvents = 'auto');
+}
+
+function createBoard(game) {
+  const board = document.createElement('div');
+  board.className = 'board';
+  for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 10; j++) {
+      const cell = document.createElement('div');
+      if (game) {
+        cell.className = 'cell';
+        cell.addEventListener('click', () => {
+          game.makeMove(j, i);
+          if(game.hasWinner()) {
+            alert('Game is over!');
+            disableBoard(board);
+          } else {
+            if (!game.currentPlayer.human) {
+              disableBoard(board);
+            }
+          }
+          if (!game.currentPlayer.human) {
+            while (!game.currentPlayer.human) {
+              game.randomMove();
+            }
+            enableBoard(board);
+          }
+        });
+      } else {
+        cell.className = 'cell dropzone';
+      }
+      cell.setAttribute('data-x', j);
+      cell.setAttribute('data-y', i);
+      board.appendChild(cell);
     }
+  }
+  return board;
 }
 
 function initMainPage(game) {
-  game.start();
   const body = document.querySelector('body');
   const content = document.createElement('div');
   content.className = 'content';
 
   const ourBoard = createBoard();
   const opponentBoard = createBoard(game);
+  disableBoard(opponentBoard);
+
+  const startButton = document.createElement('button');
+  startButton.addEventListener('click', () => {
+    game.start();
+    if (game.started) {
+      startButton.style.pointerEvents = 'none';
+      enableBoard(opponentBoard);
+      disableBoard(ourBoard);
+    }
+  });
 
   const dock = document.createElement('div');
   dock.className = 'dock';
@@ -74,11 +88,12 @@ function initMainPage(game) {
   content.appendChild(ourBoard);
   content.appendChild(opponentBoard);
 
+  body.appendChild(startButton);
   body.appendChild(content);
 
   const droppable = new Droppable(content, {
-      draggable: '.ship',
-      dropzone: '.dropzone',
+    draggable: '.ship',
+    dropzone: '.dropzone',
   });
 
   droppable.on('droppable:start', (evt) => {

@@ -23,34 +23,37 @@ it('should have contructor', () => {
   expect(game.p1.board).toEqual(p1Board);
   expect(game.p2.board).toEqual(p2Board);
   expect(game.currentPlayer).toEqual(p1);
-  expect(game.isStarted).toBeFalsy();
-  expect(game.isOver).toBeFalsy();
+  expect(game.started).toBeFalsy();
+  expect(game.over).toBeFalsy();
 });
 
 
 describe('#start', () => {
   it('should set the game started', () => {
-    expect(game.isStarted).toBeFalsy();
+    expect(game.started).toBeFalsy();
+    game.randomizeComputerBoard(game.p1.board);
     game.start();
-    expect(game.isStarted).toBeTruthy();
+    expect(game.started).toBeTruthy();
+  });
+
+  it('should no\'t start when all the ships aren\'t placed', () => {
   });
 });
 
 describe('#makeMove', () => {
   beforeEach(() => {
+    game.randomizeComputerBoard(game.p1.board);
     game.start();
-    game.p2.board.placeShip(0, 0, 2, true);
   });
 
   it('should take move, and send and attack', () => {
     expect(game.currentPlayer).toBe(p1);
     expect(game.p2.board.grid[0][0].ship).not.toBeNull();
     expect(game.p2.board.grid[0][0].hit).toBeFalsy();
+    expect(game.p2.board.grid[0][0].ship.isSunk()).toBeFalsy();
     game.makeMove(0, 0);
     expect(game.p2.board.grid[0][0].hit).toBeTruthy();
-    game.makeMove(1, 0);
-    expect(game.p2.board.grid[0][1].hit).toBeTruthy();
-    expect(game.p2.board.grid[0][1].ship.isSunk()).toBeTruthy();
+    expect(game.p2.board.grid[0][0].ship.isSunk()).toBeTruthy();
   });
 
   it('should change player if move is valid and missed shot', () => {

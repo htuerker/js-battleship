@@ -34,6 +34,7 @@ export default class Board {
         this.grid[y + i][x].ship = null;
       }
     }
+    this.ships -= 1;
   }
 
   receiveAttack(x, y) {

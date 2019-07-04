@@ -9,7 +9,7 @@ import {initMainPage} from './dom-util';
   const p1Board = new Board();
   const p2Board = new Board();
   const p1 = new Player(true, p1Board);
-  const p2 = new Player(true, p2Board);
+  const p2 = new Player(false, p2Board);
   const game = new GameLoop(p1, p2);
   initMainPage(game);
 })());

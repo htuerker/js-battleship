@@ -11,37 +11,74 @@ function createShip(length) {
   return shipSpot;
 }
 
+function createBoard(game) {
+    const board = document.createElement('div');
+    board.className = 'board';
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 10; j++) {
+        const cell = document.createElement('div');
+        if (game) {
+            cell.className = 'cell';
+            cell.addEventListener('click', () => {
+                game.makeMove(j, i);
+                console.log(game.p2.board.grid)
+                toggleBoard(game, board);
+                if (!game.currentPlayer.human) {
+                    while (!game.currentPlayer.human) {
+                        game.randomMove();
+                        console.log(game.p1.board.grid)
+                    }
+                    toggleBoard(game, board);
+                }
+            });
+        } else {
+            cell.className = 'cell dropzone';
+        }
+        cell.setAttribute('data-x', j);
+        cell.setAttribute('data-y', i);
+        board.appendChild(cell);
+      }
+    }
+
+    return board;
+}
+
+function toggleBoard(game, board) {
+    if (game.currentPlayer == game.p2) {
+        board.childNodes.forEach((e) => e.style.pointerEvents = 'none');
+    } else {
+        board.childNodes.forEach((e) => e.style.pointerEvents = 'auto');
+    }
+}
+
 function initMainPage(game) {
+  game.start();
   const body = document.querySelector('body');
   const content = document.createElement('div');
   content.className = 'content';
-  body.appendChild(content);
 
-  const ourBoard = document.createElement('div');
-  ourBoard.className = 'board';
-  ourBoard.setAttribute('id', 'our-board');
-  const board2 = document.createElement('div');
-  board2.className = 'board';
+  const ourBoard = createBoard();
+  const opponentBoard = createBoard(game);
+
   const dock = document.createElement('div');
   dock.className = 'dock';
-
-  for (let i = 0; i < 10; i++) {
-    for (let j = 0; j < 10; j++) {
-      const cell = document.createElement('div');
-      cell.className = 'cell dropzone';
-      cell.setAttribute('data-x', j);
-      cell.setAttribute('data-y', i);
-      ourBoard.appendChild(cell);
-    }
-  }
-
+  dock.appendChild(createShip(1));
   dock.appendChild(createShip(1));
   dock.appendChild(createShip(2));
+  dock.appendChild(createShip(2));
   dock.appendChild(createShip(3));
+  dock.appendChild(createShip(3));
+  dock.appendChild(createShip(4));
+
+  content.appendChild(dock);
+  content.appendChild(ourBoard);
+  content.appendChild(opponentBoard);
+
+  body.appendChild(content);
 
   const droppable = new Droppable(content, {
-    draggable: '.ship',
-    dropzone: '.dropzone',
+      draggable: '.ship',
+      dropzone: '.dropzone',
   });
 
   droppable.on('droppable:start', (evt) => {
@@ -73,9 +110,6 @@ function initMainPage(game) {
     }
   });
 
-  content.appendChild(dock);
-  content.appendChild(ourBoard);
-  content.appendChild(board2);
 }
 
 export {

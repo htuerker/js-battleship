@@ -1,81 +1,115 @@
 body {
-  background-color: salmon;
-  -webkit-touch-callout: none; /* iOS Safari */
- -webkit-user-select: none; /* Safari */
- -khtml-user-select: none; /* Konqueror HTML */
- -moz-user-select: none; /* Firefox */
- -ms-user-select: none; /* Internet Explorer/Edge */
- user-select: none; /* Non-prefixed version, currently                                   supported by Chrome and Opera */
+    margin: 0;
+    // background-color: salmon;
+    // background-image: url('../src/images/border2.jpg');
+    // background-size: cover;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently 
+    supported by Chrome and Opera */
 }
 
 .content {
-  display: flex;
-  max-width: 1300px;
-  margin: 0 auto;
-  border: 1px solid blue;
+    display: flex;
+    max-width: 1300px;
+    margin: 0 auto;
+    border: 1px solid black;
 }
 
 .dock {
-  width: 202px;
-  height: 402px;
-  margin: 40px;
-  border: 1px solid red;
+    width: 200px;
+    height: 400px;
+    margin: 20px 49px;
+    border: 1px solid black;
+    .dropzone {
+        width: 100%;
+        height: 50px;
+    }
 }
 
 .board {
-  width: 402px;
-  height: 402px;
-  margin: 40px;
-  border: 1px solid red;
-  display: flex;
-  flex-wrap: wrap;
-  div {
-    width: 38px;
-    height: 38px;
+    position: relative;
+    background-image: url('../src/images/water.png');
+    background-repeat: repeat;
+    background-size: 20px;
+    width: 400px;
+    height: 400px;
+    margin: 20px 49px;
     border: 1px solid black;
-  }
+    display: flex;
+    flex-wrap: wrap;
+    .cell {
+        width: 38px;
+        height: 38px;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+    }
 }
 
-.ship1 {
-  width: 40px;
-  height: 40px;
-  border: 1px solid green;
+.board::before {
+    content: '';
+    width: 430px;
+    height: 430px;
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    border-radius: 10px;
+    background-image: url('../src/images/border2.jpg');
+    background-size: cover;
+    z-index: -1;
 }
 
-.ship2 {
-  width: 80px;
-  height: 40px;
-  border: 1px solid purple;
+.ship {
+    height: 40px;
+    position: absolute;
 }
 
-
-
-
-
-
-.container {
-  width: 1000px;
-  display: flex;
+.ship-1 {
+    width: 40px;
 }
 
-.draggable-container,
-.droppable-container {
-  width: 400px;
-  height: 400px;
-  display: flex;
-  flex-wrap: wrap;
+.ship-2 {
+    width: 80px;
 }
 
-.draggable,
-.dropzone {
-  width: 50px;
-  height: 50px;
+.ship-3 {
+    width: 120px;
 }
 
-.draggable {
-  background-color: red;
+.ship-4 {
+    width: 160px;
 }
 
-.dropzone {
-  background-color: blue;
+.logo {
+    display: block;
+    width: 500px;
+    height: 100px;
+    margin: 20px auto;
+}
+
+.btn {
+
+}
+
+.effect {
+    width:40px;
+    height:40px;
+    position: absolute;
+    z-index: 1;
+    animation-name: grow;
+    animation-duration: 0.5s;
+}
+
+@keyframes grow {
+    0% {
+        transform: scale(0);
+    }
+    65% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
 }

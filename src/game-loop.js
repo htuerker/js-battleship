@@ -11,7 +11,10 @@ export default class GameLoop {
     this.randomizeComputerBoard(this.p2.board);
     if (this.p1.board.ships === 7 && this.p2.board.ships === 7) {
       this.started = true;
-    }
+      alert('Game started');
+  } else {
+      alert('Ships != 7');
+  }
   }
 
   hasWinner() {
@@ -40,19 +43,25 @@ export default class GameLoop {
         if (!opponent.board.isShip(x, y)) {
           console.log('You missed!');
           this.currentPlayer = opponent;
+          return { x, y, board: 'other', ship: opponent.board.grid[y][x].ship };
         } else {
           console.log('You hit the ship!');
+          return { x, y, board: 'other', ship: opponent.board.grid[y][x].ship };
         }
       }
     }
   }
 
   randomMove() {
-    const x = Math.floor(Math.random() * 10);
-    const y = Math.floor(Math.random() * 10);
-
     const opponent = (
       (this.currentPlayer === this.p1) ? this.p2 : this.p1);
+
+    let x = Math.floor(Math.random() * 10);
+    let y = Math.floor(Math.random() * 10);
+    while (opponent.board.isHit(x, y)) {
+        x = Math.floor(Math.random() * 10);
+        y = Math.floor(Math.random() * 10);
+    }
 
     if (this.started && !this.over) {
       if (!opponent.board.isHit(x, y)) {
@@ -62,8 +71,10 @@ export default class GameLoop {
         if (!opponent.board.isShip(x, y)) {
           console.log('Computer missed!');
           this.currentPlayer = opponent;
+          return { x, y, board: 'our', ship: opponent.board.grid[y][x].ship };
         } else {
           console.log('Computer hit the ship!');
+          return { x, y, board: 'our', ship: opponent.board.grid[y][x].ship };
         }
       }
     }

@@ -3,12 +3,30 @@ import { Droppable } from '@shopify/draggable';
 function createShip(length) {
   const shipSpot = document.createElement('div');
   shipSpot.className = 'dropzone draggable-dropzone--occupied';
-  const ship = document.createElement('div');
-  ship.className = 'ship draggable';
+  const ship = document.createElement('img');
+  ship.className = 'ship draggable ship-' + length;
+  ship.src = '../src/images/ship' + length + '.png';
   ship.setAttribute('data-length', length);
   shipSpot.appendChild(ship);
 
   return shipSpot;
+}
+
+function markShot(shot) {
+    let type = 'miss2';
+    if (shot.ship) {
+        type = 'boom';
+        if (shot.ship.hp == 0) {
+            const ship = document.createElement('img');
+            ship.className = 'ship ship-' + shot.ship.length;
+            ship.src = '../src/images/ship' + shot.ship.length + '.png';
+            document.querySelector('.other[data-x="' + shot.ship.head.x + '"][data-y="' + shot.ship.head.y + '"]').appendChild(ship);
+        }
+    }
+    const effect = document.createElement('img');
+    effect.className = 'effect';
+    effect.src = '../src/images/' + type + '.png';
+    document.querySelector('.' + shot.board + '[data-x="' + shot.x + '"][data-y="' + shot.y + '"]').appendChild(effect);
 }
 
 function disableBoard(board) {
@@ -26,9 +44,9 @@ function createBoard(game) {
     for (let j = 0; j < 10; j++) {
       const cell = document.createElement('div');
       if (game) {
-        cell.className = 'cell';
+        cell.className = 'other cell';
         cell.addEventListener('click', () => {
-          game.makeMove(j, i);
+          markShot(game.makeMove(j, i));
           if(game.hasWinner()) {
             alert('Game is over!');
             disableBoard(board);
@@ -39,13 +57,17 @@ function createBoard(game) {
           }
           if (!game.currentPlayer.human) {
             while (!game.currentPlayer.human) {
-              game.randomMove();
+              markShot(game.randomMove());
             }
-            enableBoard(board);
+            if(game.hasWinner()) {
+              alert('Game is over!');
+            } else {
+              enableBoard(board);
+            }
           }
         });
       } else {
-        cell.className = 'cell dropzone';
+        cell.className = 'our cell dropzone';
       }
       cell.setAttribute('data-x', j);
       cell.setAttribute('data-y', i);
@@ -60,11 +82,13 @@ function initMainPage(game) {
   const content = document.createElement('div');
   content.className = 'content';
 
-  const ourBoard = createBoard();
-  const opponentBoard = createBoard(game);
-  disableBoard(opponentBoard);
+  const logo = document.createElement('img');
+  logo.className = 'logo';
+  logo.src = '../src/images/ship1.png';
 
   const startButton = document.createElement('button');
+  startButton.innerHTML = 'Start';
+  startButton.className = 'btn';
   startButton.addEventListener('click', () => {
     game.start();
     if (game.started) {
@@ -72,6 +96,13 @@ function initMainPage(game) {
       enableBoard(opponentBoard);
       disableBoard(ourBoard);
     }
+  });
+
+  const randomButton = document.createElement('button');
+  randomButton.innerHTML = 'Random';
+  randomButton.className = 'btn';
+  randomButton.addEventListener('click', () => {
+    game.randomizeComputerBoard(game.p1.board);
   });
 
   const dock = document.createElement('div');
@@ -84,11 +115,17 @@ function initMainPage(game) {
   dock.appendChild(createShip(3));
   dock.appendChild(createShip(4));
 
+  const ourBoard = createBoard();
+  const opponentBoard = createBoard(game);
+  disableBoard(opponentBoard);
+
   content.appendChild(dock);
   content.appendChild(ourBoard);
   content.appendChild(opponentBoard);
 
+  body.appendChild(logo);
   body.appendChild(startButton);
+  body.appendChild(randomButton);
   body.appendChild(content);
 
   const droppable = new Droppable(content, {

@@ -19,8 +19,10 @@ export default class Board {
   }
 
   removeShip(ship) {
-    ship.getPositions().forEach(pos => this.grid[pos.y][pos.x].ship = null);
-    this.ships -= 1;
+    if (ship) {
+      ship.getPositions().forEach(pos => this.grid[pos.y][pos.x].ship = null);
+      this.ships -= 1;
+    }
   }
 
   receiveAttack(x, y) {

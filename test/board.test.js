@@ -87,7 +87,7 @@ describe('#removeShip', () => {
   });
 
   it('should remove ship located at the given coordinate with all ship parts', () => {
-    board.removeShip(0, 0);
+    board.removeShip(board.getShip(0, 0));
     expect(board.grid[0][0].ship).toBeNull();
     expect(board.grid[0][1].ship).toBeNull();
   });
@@ -95,7 +95,7 @@ describe('#removeShip', () => {
   it('should only decrease ships count if there\'s a removed ship', () => {
     expect(board.grid[9][9].ship).toBeNull();
     expect(board.ships).toBe(1);
-    board.removeShip(9, 9);
+    board.removeShip(board.getShip(9, 9));
     expect(board.ships).toBe(1);
   });
 });

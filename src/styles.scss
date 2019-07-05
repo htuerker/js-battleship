@@ -1,8 +1,8 @@
 body {
+    position: relative;
     margin: 0;
-    // background-color: salmon;
-    // background-image: url('../src/images/border2.jpg');
-    // background-size: cover;
+    background-image: url('../src/images/bg2.jpg');
+    background-size: cover;
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
     -khtml-user-select: none; /* Konqueror HTML */
@@ -12,11 +12,45 @@ body {
     supported by Chrome and Opera */
 }
 
+body::before {
+    content: '';
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    margin-left: -550px;
+    width: 40px;
+    height: 40px;
+    background-image: url('../src/images/screw.png');
+    background-size: contain;
+    box-shadow: 0 0 3px black;
+    border-radius: 50%;
+}
+
+body::after {
+    content: '';
+    position: absolute;
+    top: 50px;
+    right: 50%;
+    margin-right: -550px;
+    width: 40px;
+    height: 40px;
+    background-image: url('../src/images/screw.png');
+    background-size: contain;
+    box-shadow: 0 0 3px black;
+    border-radius: 50%;
+}
+
+.logo {
+    display: block;
+    width: 500px;
+    height: 100px;
+    margin: 20px auto;
+}
+
 .content {
     display: flex;
     max-width: 1300px;
     margin: 0 auto;
-    border: 1px solid black;
 }
 
 .dock {
@@ -39,12 +73,13 @@ body {
     height: 400px;
     margin: 20px 49px;
     border: 1px solid black;
+    box-shadow: 0 0 4px 1px black;
     display: flex;
     flex-wrap: wrap;
     .cell {
         width: 38px;
         height: 38px;
-        border: 1px solid rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(0, 0, 0, 0.3);
     }
 }
 
@@ -56,7 +91,8 @@ body {
     top: -15px;
     right: -15px;
     border-radius: 10px;
-    background-image: url('../src/images/border2.jpg');
+    box-shadow: 0 0 4px black inset, 0 0 3px 2px black;
+    background-image: url('../src/images/border.jpg');
     background-size: cover;
     z-index: -1;
 }
@@ -64,6 +100,11 @@ body {
 .ship {
     height: 40px;
     position: absolute;
+    z-index: 1;
+}
+
+.draggable-dropzone--active {
+    z-index: 5;
 }
 
 .ship-1 {
@@ -82,13 +123,6 @@ body {
     width: 160px;
 }
 
-.logo {
-    display: block;
-    width: 500px;
-    height: 100px;
-    margin: 20px auto;
-}
-
 .btn {
 
 }
@@ -97,7 +131,7 @@ body {
     width:40px;
     height:40px;
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     animation-name: grow;
     animation-duration: 0.5s;
 }

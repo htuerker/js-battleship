@@ -34,3 +34,23 @@ describe('#isSunk', () => {
     expect(ship.isSunk()).toBeTruthy();
   });
 });
+
+
+describe('#getPositions', () => {
+  let ship;
+
+  beforeEach(() => {
+    ship = new Ship(4, { x: 0, y: 0 }, true);
+  });
+
+  it('should return all the possible positions', () => {
+    const expectedPositions = [
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 2, y: 0 },
+      { x: 3, y: 0 },
+    ];
+
+    expect(ship.getPositions()).toEqual(expectedPositions);
+  });
+});

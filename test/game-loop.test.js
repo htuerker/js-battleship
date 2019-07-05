@@ -1,6 +1,7 @@
 import GameLoop from '../src/game-loop';
 import Player from '../src/player';
 import Board from '../src/board';
+import { randomizeBoard } from '../src/util';
 
 let p1;
 let p2;
@@ -12,7 +13,7 @@ beforeEach(() => {
   p1Board = new Board();
   p2Board = new Board();
   p1 = new Player(true, p1Board);
-  p2 = new Player(false, p2Board);
+  p2 = new Player(true, p2Board);
   game = new GameLoop(p1, p2);
 });
 
@@ -31,18 +32,17 @@ it('should have contructor', () => {
 describe('#start', () => {
   it('should set the game started', () => {
     expect(game.started).toBeFalsy();
-    game.randomizeComputerBoard(game.p1.board);
+    randomizeBoard(game.p1.board);
+    randomizeBoard(game.p2.board);
     game.start();
     expect(game.started).toBeTruthy();
-  });
-
-  it('should no\'t start when all the ships aren\'t placed', () => {
   });
 });
 
 describe('#makeMove', () => {
   beforeEach(() => {
-    game.randomizeComputerBoard(game.p1.board);
+    randomizeBoard(game.p1.board);
+    randomizeBoard(game.p2.board);
     game.start();
   });
 

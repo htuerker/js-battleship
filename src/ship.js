@@ -13,6 +13,18 @@ export default class Ship {
     this.hp = length;
   }
 
+  getPositions() {
+    const positions = [];
+    for (let i = 0; i < this.length; i++) {
+      if (this.horizontal) {
+        positions.push({ x: this.head.x + i, y: this.head.y });
+      } else {
+        positions.push({ x: this.head.x, y: this.head.y + i });
+      }
+    }
+    return positions;
+  }
+
   hit() {
     this.hp -= 1;
   }

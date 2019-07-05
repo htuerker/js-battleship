@@ -8,13 +8,10 @@ export default class GameLoop {
   }
 
   start() {
-    this.randomizeComputerBoard(this.p2.board);
     if (this.p1.board.ships === 7 && this.p2.board.ships === 7) {
       this.started = true;
-      alert('Game started');
-  } else {
-      alert('Ships != 7');
-  }
+    }
+    return this.started;
   }
 
   hasWinner() {
@@ -27,7 +24,6 @@ export default class GameLoop {
       this.over = true;
       winner = this.p2;
     }
-    console.log(winner);
     return winner;
   }
 
@@ -37,10 +33,8 @@ export default class GameLoop {
 
     if (this.started && !this.over) {
       if (!opponent.board.isHit(x, y)) {
-        console.log(`you're attacking to x:${x} y:${y}`);
-        console.log(opponent.board.grid);
         opponent.board.receiveAttack(x, y);
-        if (!opponent.board.isShip(x, y)) {
+        if (!opponent.board.getShip(x, y)) {
           console.log('You missed!');
           this.currentPlayer = opponent;
           return { x, y, board: 'other', ship: opponent.board.grid[y][x].ship };
@@ -59,8 +53,8 @@ export default class GameLoop {
     let x = Math.floor(Math.random() * 10);
     let y = Math.floor(Math.random() * 10);
     while (opponent.board.isHit(x, y)) {
-        x = Math.floor(Math.random() * 10);
-        y = Math.floor(Math.random() * 10);
+      x = Math.floor(Math.random() * 10);
+      y = Math.floor(Math.random() * 10);
     }
 
     if (this.started && !this.over) {
@@ -68,7 +62,7 @@ export default class GameLoop {
         console.log(`computer's attacking to x:${x} y:${y}`);
         console.log(opponent.board.grid);
         opponent.board.receiveAttack(x, y);
-        if (!opponent.board.isShip(x, y)) {
+        if (!opponent.board.getShip(x, y)) {
           console.log('Computer missed!');
           this.currentPlayer = opponent;
           return { x, y, board: 'our', ship: opponent.board.grid[y][x].ship };
@@ -78,15 +72,5 @@ export default class GameLoop {
         }
       }
     }
-  }
-
-  randomizeComputerBoard(board) {
-    board.placeShip(0, 0, 1, true);
-    board.placeShip(2, 0, 1, true);
-    board.placeShip(4, 0, 2, true);
-    board.placeShip(7, 0, 2, true);
-    board.placeShip(0, 2, 3, true);
-    board.placeShip(4, 2, 3, true);
-    board.placeShip(0, 4, 4, true);
   }
 }

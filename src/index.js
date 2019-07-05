@@ -1,4 +1,3 @@
-
 import './styles.scss';
 import GameLoop from './game-loop';
 import Player from './player';

@@ -147,3 +147,11 @@ body::after {
         transform: scale(1);
     }
 }
+
+.draggable-dropzone--active {
+  z-index: 99900909;
+}
+
+.draggable-mirror {
+  display: none !important;
+}

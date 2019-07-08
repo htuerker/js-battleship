@@ -12,7 +12,14 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
 
-  plugins: [new webpack.ProgressPlugin(), new HtmlWebpackPlugin()],
+  plugins: [
+    new webpack.ProgressPlugin(),
+    new HtmlWebpackPlugin({
+      title: 'BattleshiP',
+      favicon: './src/images/screw.png',
+      hash: true,
+    })
+  ],
 
   module: {
     rules: [

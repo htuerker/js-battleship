@@ -1,6 +1,7 @@
 import { Droppable } from '@shopify/draggable';
 import Ship from './ship';
 import { randomizeBoard, getRandomData } from './util';
+import Swal from 'sweetalert2'
 
 function markShot(shot) {
   if (!shot) return;
@@ -42,7 +43,12 @@ function createBoard(game) {
         cell.addEventListener('click', () => {
           markShot(game.makeMove(j, i));
           if (game.hasWinner()) {
-            alert('Game is over!');
+            Swal.fire({
+              title: 'Game Over',
+              text: 'You win!',
+              type: 'success',
+              confirmButtonColor: '#666',
+            });
             disableBoard(board);
           } else if (!game.currentPlayer.human) {
             disableBoard(board);
@@ -52,7 +58,12 @@ function createBoard(game) {
               markShot(game.randomMove());
             }
             if (game.hasWinner()) {
-              alert('Game is over!');
+              Swal.fire({
+                title: 'Game Over',
+                text: 'You lose.',
+                type: 'error',
+                confirmButtonColor: '#666',
+              });
             } else {
               enableBoard(board);
             }
@@ -77,12 +88,21 @@ function start(game) {
     document.querySelector('#startBtn .btn').style.backgroundImage = "url('../src/images/btn-pressed.png')";
     enableBoard(document.querySelectorAll('.board')[1]);
     disableBoard(document.querySelectorAll('.board')[0]);
-    alert('Game has started!')
+    Swal.fire({
+      title: 'Game Started',
+      text: 'Good luck!',
+      type: 'warning',
+      confirmButtonColor: '#666',
+    })
   }
 }
 
 function reset(game) {
-  alert('Please refresh you browser, lazy boy.')
+  Swal.fire({
+    text: 'Refresh your browser, lazy boy.',
+    type: 'info',
+    confirmButtonColor: '#666',
+  })
 }
 
 function createButton(title, func) {

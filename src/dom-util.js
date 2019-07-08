@@ -1,6 +1,6 @@
 import { Droppable } from '@shopify/draggable';
 import Ship from './ship';
-import { randomizeBoard } from './util';
+import { randomizeBoard, getRandomData } from './util';
 
 function markShot(shot) {
   // TO-DO invalid move returns undefined shot!
@@ -10,7 +10,7 @@ function markShot(shot) {
     type = 'boom';
     if (shot.ship.hp === 0) {
       const ship = document.createElement('img');
-      ship.className = `ship ship-${shot.ship.length}`;
+      ship.className = `sunken ship ship-${shot.ship.length}`;
       ship.src = `../src/images/ship${shot.ship.length}.png`;
       document.querySelector(`.${shot.board}[data-x="${shot.ship.head.x}"][data-y="${shot.ship.head.y}"]`).appendChild(ship);
     }
@@ -67,59 +67,82 @@ function createBoard(game) {
   return board;
 }
 
-function createShip(length) {
-  const shipSpot = document.createElement('div');
-  shipSpot.className = 'dropzone draggable-dropzone--occupied';
-  const ship = document.createElement('img');
-  ship.className = `ship draggable ship-${length}`;
-  ship.src = `../src/images/ship${length}.png`;
-  ship.setAttribute('data-length', length);
-  shipSpot.appendChild(ship);
-
-  return shipSpot;
+function start(game) {
+  randomizeBoard(game.p2.board);
+  game.start();
+  if (game.started) {
+    document.querySelector('#startBtn').style.pointerEvents = 'none';
+    enableBoard(document.querySelectorAll('.board')[1]);
+    disableBoard(document.querySelectorAll('.board')[0]);
+    alert('Heya, start!')
+  }
 }
 
-
-function createDock() {
-  const dock = document.createElement('div');
-  dock.className = 'dock';
-  dock.appendChild(createShip(1));
-  dock.appendChild(createShip(1));
-  dock.appendChild(createShip(2));
-  dock.appendChild(createShip(2));
-  dock.appendChild(createShip(3));
-  dock.appendChild(createShip(3));
-  dock.appendChild(createShip(4));
-
-  return dock;
+function reset(game) {
+  alert('Heya, reset!')
 }
 
-function createStartButton(game, ourBoardDiv, opponentBoardDiv) {
-  const startButton = document.createElement('button');
-  startButton.innerHTML = 'Start';
-  startButton.className = 'btn';
-  startButton.addEventListener('click', () => {
-    randomizeBoard(game.p2.board);
-    game.start();
-    if (game.started) {
-      startButton.style.pointerEvents = 'none';
-      enableBoard(opponentBoardDiv);
-      disableBoard(ourBoardDiv);
+function createButton(func) {
+  const button = document.createElement('div');
+  button.className = 'btn';
+  button.addEventListener('click', func);
+
+  return button;
+}
+
+function createPanel(game) {
+  const panel = document.createElement('div');
+  panel.className = 'panel';
+  const startButton = createButton(() => start(game));
+  startButton.id = 'startBtn';
+  panel.appendChild(startButton);
+  const resetButton = createButton(() => reset(game));
+  resetButton.id = 'resetBtn';
+  panel.appendChild(resetButton);
+
+  return panel;
+}
+
+function rotateShip(event, game) {
+  const x = parseInt(event.target.parentElement.attributes['data-x'].value, 10);
+  const y = parseInt(event.target.parentElement.attributes['data-y'].value, 10);
+  const length = parseInt(event.target.attributes['data-length'].value, 10);
+  const horizontal = (event.target.attributes['data-horizontal'].value === 'true');
+
+  game.p1.board.removeShip(game.p1.board.getShip(x, y));
+  
+  const ship = new Ship(length, { x, y }, !horizontal);
+  if (!game.p1.board.isValid(ship)) {
+    console.log('deu merda')
+    game.p1.board.placeShip(new Ship(length, { x, y }, horizontal));
+    return false;
+  } else {
+    console.log('deu bom')
+    if (horizontal) {
+      event.target.attributes['data-horizontal'].value = 'false';
+      event.target.classList.add('v-ship');
+    } else {
+      event.target.attributes['data-horizontal'].value = 'true';
+      event.target.classList.remove('v-ship');
     }
-  });
-
-  return startButton;
+    game.p1.board.placeShip(ship);
+  }
 }
 
-function createRandomButton(game) {
-  const randomButton = document.createElement('button');
-  randomButton.innerHTML = 'Random';
-  randomButton.className = 'btn';
-  randomButton.addEventListener('click', () => {
-    game.randomizeComputerBoard(game.p1.board);
+function createShips(game) {
+  getRandomData().forEach((data) => {
+    const ship = document.createElement('img');
+    ship.className = `ship draggable ship-${data.len}`;
+    ship.src = `../src/images/ship${data.len}.png`;
+    ship.setAttribute('data-length', data.len);
+    ship.setAttribute('data-horizontal', data.hor);
+    if (!data.hor) {
+      ship.classList.add('v-ship');
+    }
+    ship.addEventListener('click', () => rotateShip(event, game));
+    document.querySelector(`.our[data-x="${data.x}"][data-y="${data.y}"]`).appendChild(ship);
+    game.p1.board.placeShip(new Ship(data.len, { x: data.x, y: data.y }, data.hor));
   });
-
-  return randomButton;
 }
 
 function handleDroppableStart(event, game) {
@@ -136,7 +159,8 @@ function handleDroppableDropped(event, game) {
     const x = parseInt(event.data.dropzone.attributes['data-x'].value, 10);
     const y = parseInt(event.data.dropzone.attributes['data-y'].value, 10);
     const length = parseInt(event.data.dragEvent.data.originalSource.attributes['data-length'].value, 10);
-    const ship = new Ship(length, { x, y }, true);
+    const horizontal = (event.data.dragEvent.data.originalSource.attributes['data-horizontal'].value === 'true');
+    const ship = new Ship(length, { x, y }, horizontal);
     if (!game.p1.board.isValid(ship)) {
       event.cancel();
     }
@@ -148,44 +172,41 @@ function handleDroppableStop(event, game) {
     const x = parseInt(event.data.dropzone.attributes['data-x'].value, 10);
     const y = parseInt(event.data.dropzone.attributes['data-y'].value, 10);
     const length = parseInt(event.data.dragEvent.data.originalSource.attributes['data-length'].value, 10);
-    const ship = new Ship(length, { x, y }, true);
+    const horizontal = (event.data.dragEvent.data.originalSource.attributes['data-horizontal'].value === 'true');
+    const ship = new Ship(length, { x, y }, horizontal);
     game.p1.board.placeShip(ship);
   }
 }
-
 
 function initMainPage(game) {
   const body = document.querySelector('body');
   const content = document.createElement('div');
   content.className = 'content';
 
-  const logo = document.createElement('img');
+  const logo = document.createElement('h1');
   logo.className = 'logo';
-  logo.src = '../src/images/ship1.png';
+  // logo.src = '../src/images/bs.png';
+  logo.innerHTML = "Nice logo goes here"
 
-  const dockDiv = createDock();
   const ourBoardDiv = createBoard();
   const opponentBoardDiv = createBoard(game);
+  const panelDiv = createPanel(game);
   disableBoard(opponentBoardDiv);
 
-  const startButton = createStartButton(game, ourBoardDiv, opponentBoardDiv);
-  const randomButton = createRandomButton(game);
-
-  content.appendChild(dockDiv);
+  content.appendChild(panelDiv);
   content.appendChild(ourBoardDiv);
   content.appendChild(opponentBoardDiv);
 
   body.appendChild(logo);
-  body.appendChild(startButton);
-  body.appendChild(randomButton);
   body.appendChild(content);
+
+  createShips(game);
 
   const droppable = new Droppable(content, { draggable: '.ship', dropzone: '.dropzone' });
   droppable.on('droppable:start', (evt) => { handleDroppableStart(evt, game); });
   droppable.on('droppable:dropped', (evt) => { handleDroppableDropped(evt, game); });
   droppable.on('droppable:stop', (evt) => { handleDroppableStop(evt, game); });
 }
-
 
 
 export {

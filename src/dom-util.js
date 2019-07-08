@@ -73,14 +73,15 @@ function start(game) {
   game.start();
   if (game.started) {
     document.querySelector('#startBtn').style.pointerEvents = 'none';
+    document.querySelector('#startBtn .btn').style.backgroundImage = "url('../src/images/btn-pressed.png')";
     enableBoard(document.querySelectorAll('.board')[1]);
     disableBoard(document.querySelectorAll('.board')[0]);
-    alert('Heya, start!')
+    alert('Game has started!')
   }
 }
 
 function reset(game) {
-  alert('Heya, reset!')
+  alert('Please refresh you browser, lazy boy.')
 }
 
 function createButton(title, func) {

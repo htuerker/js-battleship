@@ -11,7 +11,7 @@ function markShot(shot) {
     if (shot.ship.hp === 0) {
       const ship = document.createElement('img');
       ship.className = `sunken ship ship-${shot.ship.length}`;
-      if (!shot.ship.horizontal) { ship.classList.add('v-ship') };
+      if (!shot.ship.horizontal) { ship.classList.add('v-ship'); }
       ship.src = `../src/images/ship${shot.ship.length}.png`;
       document.querySelector(`.${shot.board}[data-x="${shot.ship.head.x}"][data-y="${shot.ship.head.y}"]`).appendChild(ship);
     }
@@ -119,20 +119,17 @@ function rotateShip(event, game) {
 
   const ship = new Ship(length, { x, y }, !horizontal);
   if (!game.p1.board.isValid(ship)) {
-    console.log('deu merda')
     game.p1.board.placeShip(new Ship(length, { x, y }, horizontal));
     return false;
-  } else {
-    console.log('deu bom')
-    if (horizontal) {
-      event.target.attributes['data-horizontal'].value = 'false';
-      event.target.classList.add('v-ship');
-    } else {
-      event.target.attributes['data-horizontal'].value = 'true';
-      event.target.classList.remove('v-ship');
-    }
-    game.p1.board.placeShip(ship);
   }
+  if (horizontal) {
+    event.target.attributes['data-horizontal'].value = 'false';
+    event.target.classList.add('v-ship');
+  } else {
+    event.target.attributes['data-horizontal'].value = 'true';
+    event.target.classList.remove('v-ship');
+  }
+  game.p1.board.placeShip(ship);
 }
 
 function createShips(game) {

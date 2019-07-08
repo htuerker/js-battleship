@@ -1,4 +1,4 @@
-import GameLoop from '../src/game-loop';
+import GameLoop from '../src/game';
 import Player from '../src/player';
 import Board from '../src/board';
 import { randomizeBoard } from '../src/util';
@@ -17,18 +17,6 @@ beforeEach(() => {
   game = new GameLoop(p1, p2);
 });
 
-
-it('should have contructor', () => {
-  expect(game.p1).toEqual(p1);
-  expect(game.p2).toEqual(p2);
-  expect(game.p1.board).toEqual(p1Board);
-  expect(game.p2.board).toEqual(p2Board);
-  expect(game.currentPlayer).toEqual(p1);
-  expect(game.started).toBeFalsy();
-  expect(game.over).toBeFalsy();
-});
-
-
 describe('#start', () => {
   it('should set the game started', () => {
     expect(game.started).toBeFalsy();
@@ -39,26 +27,33 @@ describe('#start', () => {
   });
 });
 
+describe('#hasWinner', () => {
+  it('should return winner if there is', () => {
+    game.p1.board.ships = 1;
+    game.p2.board.ships = 1;
+    expect(game.hasWinner()).toBeNull();
+    game.p2.board.ships = 0;
+    expect(game.hasWinner()).toBe(p1);
+  });
+});
+
 describe('#makeMove', () => {
   beforeEach(() => {
-    randomizeBoard(game.p1.board);
-    randomizeBoard(game.p2.board);
-    game.start();
+    game.started = true;
+    game.over = false;
   });
 
   it('should take move, and send and attack', () => {
     expect(game.currentPlayer).toBe(p1);
-    expect(game.p2.board.grid[0][0].ship).not.toBeNull();
     expect(game.p2.board.grid[0][0].hit).toBeFalsy();
-    expect(game.p2.board.grid[0][0].ship.isSunk()).toBeFalsy();
     game.makeMove(0, 0);
     expect(game.p2.board.grid[0][0].hit).toBeTruthy();
-    expect(game.p2.board.grid[0][0].ship.isSunk()).toBeTruthy();
   });
 
   it('should change player if move is valid and missed shot', () => {
     expect(game.currentPlayer).toBe(game.p1);
-    game.makeMove(5, 5);
+    expect(game.p2.board.getShip(0, 0)).toBeNull();
+    game.makeMove(0, 0);
     expect(game.currentPlayer).toBe(game.p2);
   });
 });

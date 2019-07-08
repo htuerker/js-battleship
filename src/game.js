@@ -1,4 +1,4 @@
-export default class GameLoop {
+export default class Game {
   constructor(p1, p2) {
     this.p1 = p1;
     this.p2 = p2;
@@ -15,14 +15,14 @@ export default class GameLoop {
   }
 
   hasWinner() {
-    let winner;
+    let winner = null;
     if (this.p1.board.ships <= 0) {
       this.over = true;
-      winner = this.p1;
+      winner = this.p2;
     }
     if (this.p2.board.ships <= 0) {
       this.over = true;
-      winner = this.p2;
+      winner = this.p1;
     }
     return winner;
   }
@@ -35,13 +35,9 @@ export default class GameLoop {
       if (!opponent.board.isHit(x, y)) {
         opponent.board.receiveAttack(x, y);
         if (!opponent.board.getShip(x, y)) {
-          console.log('You missed!');
           this.currentPlayer = opponent;
-          return { x, y, board: 'other', ship: opponent.board.grid[y][x].ship };
-        } else {
-          console.log('You hit the ship!');
-          return { x, y, board: 'other', ship: opponent.board.grid[y][x].ship };
         }
+        return { x, y, board: 'other', ship: opponent.board.grid[y][x].ship };
       }
     }
   }
@@ -59,15 +55,11 @@ export default class GameLoop {
 
     if (this.started && !this.over) {
       if (!opponent.board.isHit(x, y)) {
-        console.log(`computer's attacking to x:${x} y:${y}`);
-        console.log(opponent.board.grid);
         opponent.board.receiveAttack(x, y);
         if (!opponent.board.getShip(x, y)) {
-          console.log('Computer missed!');
           this.currentPlayer = opponent;
           return { x, y, board: 'our', ship: opponent.board.grid[y][x].ship };
         } else {
-          console.log('Computer hit the ship!');
           return { x, y, board: 'our', ship: opponent.board.grid[y][x].ship };
         }
       }

@@ -1,10 +1,8 @@
-import Ship from './ship';
-
 export default class Board {
   constructor() {
-    this.grid = Array.from(Array(10), () =>
-      Array.from(Array(10), () => ({hit: false, ship: null})),
-    );
+    this.grid = Array.from(Array(10), () => (
+      Array.from(Array(10), () => ({ hit: false, ship: null }))));
+
     this.ships = 0;
   }
 

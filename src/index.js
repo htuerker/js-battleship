@@ -1,4 +1,5 @@
 import './styles.scss';
+import font from './fonts/metalslug.ttf';
 import GameLoop from './game-loop';
 import Player from './player';
 import Board from './board';
@@ -12,3 +13,5 @@ import {initMainPage} from './dom-util';
   const game = new GameLoop(p1, p2);
   initMainPage(game);
 })());
+
+console.log(font)

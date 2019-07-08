@@ -11,6 +11,7 @@ function markShot(shot) {
     if (shot.ship.hp === 0) {
       const ship = document.createElement('img');
       ship.className = `sunken ship ship-${shot.ship.length}`;
+      if (!shot.ship.horizontal) { ship.classList.add('v-ship') };
       ship.src = `../src/images/ship${shot.ship.length}.png`;
       document.querySelector(`.${shot.board}[data-x="${shot.ship.head.x}"][data-y="${shot.ship.head.y}"]`).appendChild(ship);
     }
@@ -82,21 +83,26 @@ function reset(game) {
   alert('Heya, reset!')
 }
 
-function createButton(func) {
+function createButton(title, func) {
   const button = document.createElement('div');
   button.className = 'btn';
   button.addEventListener('click', func);
+  const name = document.createElement('h1');
+  name.innerHTML = `${title}<span>${title}</span>`;
+  const buttonDiv = document.createElement('div');
+  buttonDiv.appendChild(button);
+  buttonDiv.appendChild(name);
 
-  return button;
+  return buttonDiv;
 }
 
 function createPanel(game) {
   const panel = document.createElement('div');
   panel.className = 'panel';
-  const startButton = createButton(() => start(game));
+  const startButton = createButton('start', () => start(game));
   startButton.id = 'startBtn';
   panel.appendChild(startButton);
-  const resetButton = createButton(() => reset(game));
+  const resetButton = createButton('reset', () => reset(game));
   resetButton.id = 'resetBtn';
   panel.appendChild(resetButton);
 
@@ -110,7 +116,7 @@ function rotateShip(event, game) {
   const horizontal = (event.target.attributes['data-horizontal'].value === 'true');
 
   game.p1.board.removeShip(game.p1.board.getShip(x, y));
-  
+
   const ship = new Ship(length, { x, y }, !horizontal);
   if (!game.p1.board.isValid(ship)) {
     console.log('deu merda')
@@ -185,8 +191,7 @@ function initMainPage(game) {
 
   const logo = document.createElement('h1');
   logo.className = 'logo';
-  // logo.src = '../src/images/bs.png';
-  logo.innerHTML = "Nice logo goes here"
+  logo.innerHTML = 'BattleshiP<span>BattleshiP</span>';
 
   const ourBoardDiv = createBoard();
   const opponentBoardDiv = createBoard(game);

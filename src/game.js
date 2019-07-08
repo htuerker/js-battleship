@@ -37,7 +37,8 @@ export default class Game {
         if (!opponent.board.getShip(x, y)) {
           this.currentPlayer = opponent;
         }
-        return { x, y, board: 'other', ship: opponent.board.grid[y][x].ship };
+        const board = (opponent === this.p1) ? 'own' : 'opp';
+        return { x, y, board, ship: opponent.board.grid[y][x].ship };
       }
     }
   }
@@ -53,16 +54,6 @@ export default class Game {
       y = Math.floor(Math.random() * 10);
     }
 
-    if (this.started && !this.over) {
-      if (!opponent.board.isHit(x, y)) {
-        opponent.board.receiveAttack(x, y);
-        if (!opponent.board.getShip(x, y)) {
-          this.currentPlayer = opponent;
-          return { x, y, board: 'our', ship: opponent.board.grid[y][x].ship };
-        } else {
-          return { x, y, board: 'our', ship: opponent.board.grid[y][x].ship };
-        }
-      }
-    }
+    return this.makeMove(x, y);
   }
 }

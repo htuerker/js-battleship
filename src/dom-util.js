@@ -3,7 +3,6 @@ import Ship from './ship';
 import { randomizeBoard, getRandomData } from './util';
 
 function markShot(shot) {
-  // TO-DO invalid move returns undefined shot!
   if (!shot) return;
   let type = 'miss2';
   if (shot.ship) {
@@ -19,7 +18,9 @@ function markShot(shot) {
   const effect = document.createElement('img');
   effect.className = 'effect';
   effect.src = `./src/images/${type}.png`;
-  document.querySelector(`.${shot.board}[data-x="${shot.x}"][data-y="${shot.y}"]`).appendChild(effect);
+  const cell = document.querySelector(`.${shot.board}[data-x="${shot.x}"][data-y="${shot.y}"]`);
+  cell.classList.remove('darkened');
+  cell.appendChild(effect);
 }
 
 function disableBoard(boardDiv) {
@@ -37,7 +38,7 @@ function createBoard(game) {
     for (let j = 0; j < 10; j++) {
       const cell = document.createElement('div');
       if (game) {
-        cell.className = 'other cell';
+        cell.className = 'opp cell darkened';
         cell.addEventListener('click', () => {
           markShot(game.makeMove(j, i));
           if (game.hasWinner()) {
@@ -58,7 +59,7 @@ function createBoard(game) {
           }
         });
       } else {
-        cell.className = 'our cell dropzone';
+        cell.className = 'own cell dropzone';
       }
       cell.setAttribute('data-x', j);
       cell.setAttribute('data-y', i);
@@ -144,7 +145,7 @@ function createShips(game) {
       ship.classList.add('v-ship');
     }
     ship.addEventListener('click', () => rotateShip(event, game));
-    document.querySelector(`.our[data-x="${data.x}"][data-y="${data.y}"]`).appendChild(ship);
+    document.querySelector(`.own[data-x="${data.x}"][data-y="${data.y}"]`).appendChild(ship);
     game.p1.board.placeShip(new Ship(data.len, { x: data.x, y: data.y }, data.hor));
   });
 }
@@ -187,9 +188,9 @@ function initMainPage(game) {
   const content = document.createElement('div');
   content.className = 'content';
 
-  const logo = document.createElement('h1');
+  const logo = document.createElement('div');
   logo.className = 'logo';
-  logo.innerHTML = 'BattleshiP<span>BattleshiP</span>';
+  logo.innerHTML = '<h1>BattleshiP<span>BattleshiP</span></h1>';
 
   const ourBoardDiv = createBoard();
   const opponentBoardDiv = createBoard(game);

@@ -7,9 +7,6 @@ $cell-size: 38px;
 
 body {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   margin: 0;
   background-image: url('../src/images/bg2.jpg');
   background-size: cover;
@@ -19,59 +16,56 @@ body {
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50px;
-    left: 50%;
-    margin-left: -10 * ($cell-size + 2);
-    width: $cell-size + 2;
-    height: $cell-size + 2;
-    background-image: url('../src/images/screw.png');
-    background-size: contain;
-    box-shadow: 0 1px 4px -1px black, 0 0 1px black inset;
-    border-radius: 50%;
-  }
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50px;
-    right: 50%;
-    margin-right: -10 * ($cell-size + 2);
-    width: $cell-size + 2;
-    height: $cell-size + 2;
-    background-image: url('../src/images/screw.png');
-    background-size: contain;
-    box-shadow: 0 1px 4px -1px black, 0 0 1px black inset;
-    border-radius: 50%;
-  }
 }
 
 h1 {
   position: relative;
   font-family: metalslug;
-  letter-spacing: ($cell-size + 2)/10;
   background: linear-gradient(#333, #ddd, #333);
   -webkit-background-clip: text;
-  color: rgba(0, 0, 0, 0);
-}
-span {
-  position: absolute;
-  top: 0;
-  left: 0;
-  text-shadow: 1px 1px 0 #333, 2px 2px 0 #333, 3px 3px 0 #333, 4px 4px 10px black, -1px -1px 0 #666;
-  z-index: -1;
+  color: rgba(0, 0, 0, 0.1);
+  span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-shadow: 1px 1px 0 #111, 2px 2px 0 #111, 3px 3px 0 #111, 4px 4px 10px black, -1px -1px 0 #333;
+    z-index: -1;
+  }
 }
 
 .logo {
-  margin: 20px auto;
-  font-size: 2 * ($cell-size + 2);
+  margin: 0 auto;
+  width: 1200px;
+  display: flex;
+  justify-content: space-around;
+  h1 {
+    font-size: 2 * ($cell-size + 2);
+    margin: 20px 0;
+  }
+  &::before, &::after {
+    content: '';
+    position: relative;
+    top: 50px;
+    width: $cell-size + 2;
+    height: $cell-size + 2;
+    background-image: url('../src/images/screw.png');
+    background-size: contain;
+    box-shadow: 0 1px 4px -1px black, 0 0 1px black inset;
+    border-radius: 50%;
+  }
+  &::before {
+    left: 50px;
+  }
+  &::after {
+    right: 50px;
+  }
 }
 
 .content {
   display: flex;
-  max-width: 1200px;
-  margin: 30px auto;
+  width: 1200px;
+  margin: 20px auto;
+  outline: none;
 }
 
 .panel {
@@ -103,7 +97,7 @@ span {
     margin: 0;
     padding: 0;
     background-image: url('../src/images/btn-normal.png');
-    background-color: #904040;
+    background-color: #944;
     background-size: cover;
     &:active {
       background-image: url('../src/images/btn-pressed.png');
@@ -141,6 +135,9 @@ span {
     height: $cell-size;
     border: 1px solid rgba(0, 0, 0, 0.3);
   }
+  .darkened {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
 }
 
 .ship {
@@ -158,10 +155,6 @@ span {
   .ship-#{$i} {
     width: $i * $cell-size;
   }
-}
-
-.sunken {
-
 }
 
 .effect {

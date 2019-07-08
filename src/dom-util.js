@@ -8,17 +8,17 @@ function markShot(shot) {
   let type = 'miss2';
   if (shot.ship) {
     type = 'boom';
-    if (shot.ship.hp === 0) {
+    if (shot.ship.hp === 0 && shot.board === 'opp') {
       const ship = document.createElement('img');
-      ship.className = `sunken ship ship-${shot.ship.length}`;
+      ship.className = `ship ship-${shot.ship.length}`;
       if (!shot.ship.horizontal) { ship.classList.add('v-ship'); }
       ship.src = `../src/images/ship${shot.ship.length}.png`;
-      document.querySelector(`.${shot.board}[data-x="${shot.ship.head.x}"][data-y="${shot.ship.head.y}"]`).appendChild(ship);
+      document.querySelector(`.opp[data-x="${shot.ship.head.x}"][data-y="${shot.ship.head.y}"]`).appendChild(ship);
     }
   }
   const effect = document.createElement('img');
   effect.className = 'effect';
-  effect.src = `./src/images/${type}.png`;
+  effect.src = `../src/images/${type}.png`;
   const cell = document.querySelector(`.${shot.board}[data-x="${shot.x}"][data-y="${shot.y}"]`);
   cell.classList.remove('darkened');
   cell.appendChild(effect);

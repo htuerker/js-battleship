@@ -1,0 +1,188 @@
+$cell-size: 38px;
+
+@font-face {
+  font-family: metalslug;
+  src: url('../src/fonts/metalslug.ttf');
+}
+
+body {
+  position: relative;
+  margin: 0;
+  background-image: url('../src/images/bg2.jpg');
+  background-size: cover;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+h1 {
+  position: relative;
+  font-family: metalslug;
+  background: linear-gradient(#333, #ddd, #333);
+  -webkit-background-clip: text;
+  color: rgba(0, 0, 0, 0.1);
+  span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-shadow: 1px 1px 0 #111, 2px 2px 0 #111, 3px 3px 0 #111, 4px 4px 10px black, -1px -1px 0 #333;
+    z-index: -1;
+  }
+}
+
+.logo {
+  margin: 0 auto;
+  width: 1200px;
+  display: flex;
+  justify-content: space-around;
+  h1 {
+    font-size: 2 * ($cell-size + 2);
+    margin: 20px 0;
+  }
+  &::before, &::after {
+    content: '';
+    position: relative;
+    top: 50px;
+    width: $cell-size + 2;
+    height: $cell-size + 2;
+    background-image: url('../src/images/screw.png');
+    background-size: contain;
+    box-shadow: 0 1px 4px -1px black, 0 0 1px black inset;
+    border-radius: 50%;
+  }
+  &::before {
+    left: 50px;
+  }
+  &::after {
+    right: 50px;
+  }
+}
+
+.content {
+  display: flex;
+  width: 1200px;
+  margin: 20px auto;
+  outline: none;
+}
+
+.panel {
+  width: 3 * ($cell-size + 2);
+  height: 10 * ($cell-size + 2);
+  margin: 20px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-around;
+  > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    h1 {
+      margin: 0;
+      margin-top: 5px;
+      padding: 0;
+      font-size: ($cell-size + 2);
+    }
+  }
+  .btn {
+    text-align: center;
+    line-height: 100px;
+    box-shadow: 0 2px 10px -1px black, 0 0 2px black inset;
+    border-radius: 50%;
+    width: 3 * ($cell-size + 2);
+    height: 3 * ($cell-size + 2);
+    margin: 0;
+    padding: 0;
+    background-image: url('../src/images/btn-normal.png');
+    background-color: #944;
+    background-size: cover;
+    &:active {
+      background-image: url('../src/images/btn-pressed.png');
+    }
+  }
+}
+
+.board {
+  position: relative;
+  background-image: url('../src/images/water.png');
+  background-repeat: repeat;
+  background-size: 20px;
+  width: 10 * ($cell-size + 2);
+  height: 10 * ($cell-size + 2);
+  margin: 20px 49px;
+  border: 1px solid black;
+  box-shadow: 0 0 4px 1px black;
+  display: flex;
+  flex-wrap: wrap;
+  &::before {
+    content: '';
+    width: 10 * ($cell-size + 2) + 30;
+    height: 10 * ($cell-size + 2) + 30;
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    border-radius: 10px;
+    box-shadow: 0 0 4px black inset, 0 0 3px 2px black;
+    background-image: url('../src/images/border.jpg');
+    background-size: cover;
+    z-index: -1;
+  }
+  .cell {
+    width: $cell-size;
+    height: $cell-size;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+  }
+  .darkened {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.ship {
+  height: $cell-size;
+  position: absolute;
+  z-index: 1;
+}
+
+.v-ship {
+  transform-origin: 19px 50%;
+  transform: rotate(90deg);
+}
+
+@for $i from 1 through 4 {
+  .ship-#{$i} {
+    width: $i * $cell-size;
+  }
+}
+
+.effect {
+  width: $cell-size;
+  height: $cell-size;
+  margin: 1px;
+  position: absolute;
+  z-index: 2;
+  animation-name: shot-fx;
+  animation-duration: 0.5s;
+}
+
+@keyframes shot-fx {
+  0% {
+    transform: scale(0);
+  }
+  65% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.draggable-dropzone--active {
+  z-index: 9;
+}
+
+.draggable-mirror {
+  display: none !important;
+}

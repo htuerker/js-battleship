@@ -6,4 +6,4 @@ Authors: <a href="https://github.com/btuerker">Burhan Tuerker</a> / <a href="htt
 
 Preview: 
 
-https://raw.githack.com/btuerker/js-battleship/dev/dist/index.html
+https://raw.githack.com/madcido/js-battleship/master/dist/index.html

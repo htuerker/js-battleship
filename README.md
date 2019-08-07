@@ -26,7 +26,7 @@ $ webpack -v
 ##### Clone project
 ```
 $ git clone https://github.com/madcido/js-battleship.git
-$ cd ./js-todo
+$ cd ./js-battleship
 ```
 ##### Install dependencies
 ```

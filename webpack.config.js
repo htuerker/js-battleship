@@ -17,6 +17,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'BattleshiP',
       favicon: './src/images/screw.png',
+      meta: {viewport: 'width=device-width, initial-scale=1'},
       hash: true,
     })
   ],

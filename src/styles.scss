@@ -1,14 +1,81 @@
-$cell-size: 38px;
-
 @font-face {
   font-family: metalslug;
   src: url('../src/fonts/metalslug.ttf');
 }
 
+@mixin relative-sizes($cell-size) {
+  .logo {
+    margin: 0 0 $cell-size 0;
+    h1 {
+      font-size: 2 * $cell-size;
+    }
+    &::before, &::after {
+      top: 0.2 * $cell-size;
+      width: $cell-size;
+      height: $cell-size;
+    }
+    &::before {
+      margin-right: 1 * $cell-size;
+    }
+    &::after {
+      margin-left: 1 * $cell-size;
+    }
+  }
+  .panel {
+    > div {
+      margin: 0.6 * $cell-size;
+      h1 {
+        margin-top: 0.1 * $cell-size;
+        font-size: $cell-size;
+      }
+    }
+    .btn {
+      width: 3 * $cell-size;
+      height: 3 * $cell-size;
+    }
+  }
+  .board {
+    background-size: 0.5 * $cell-size;
+    width: 10 * $cell-size;
+    height: 10 * $cell-size;
+    margin: $cell-size;
+    &::before {
+      width: 11 * $cell-size;
+      height: 11 * $cell-size;
+      top: -0.5 * $cell-size;
+      right: -0.5 * $cell-size;
+      border-radius: 0.25 * $cell-size;
+    }
+    .cell {
+      width: $cell-size;
+      height: $cell-size;
+    }
+  }
+  .ship {
+    height: $cell-size;
+  }
+  .v-ship {
+    transform-origin: 0.5 * $cell-size 50%;
+  }
+  @for $i from 1 through 4 {
+    .ship-#{$i} {
+      width: $i * $cell-size;
+    }
+  }
+  .effect {
+    width: $cell-size;
+    height: $cell-size;
+  }
+}
+
 body {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   margin: 0;
-  background-image: url('../src/images/bg2.jpg');
+  height: 100vh;
+  background-image: url('../src/images/bg3.jpg');
   background-size: cover;
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
@@ -19,6 +86,7 @@ body {
 }
 
 h1 {
+  margin: 0;
   position: relative;
   font-family: metalslug;
   background: linear-gradient(#333, #ddd, #333);
@@ -34,66 +102,41 @@ h1 {
 }
 
 .logo {
-  margin: 0 auto;
-  width: 1200px;
+  box-sizing: border-box;
   display: flex;
-  justify-content: space-around;
-  h1 {
-    font-size: 2 * ($cell-size + 2);
-    margin: 20px 0;
-  }
+  align-items: center;
+  justify-content: center;
   &::before, &::after {
     content: '';
     position: relative;
-    top: 50px;
-    width: $cell-size + 2;
-    height: $cell-size + 2;
     background-image: url('../src/images/screw.png');
     background-size: contain;
     box-shadow: 0 1px 4px -1px black, 0 0 1px black inset;
     border-radius: 50%;
   }
-  &::before {
-    left: 50px;
-  }
-  &::after {
-    right: 50px;
-  }
 }
 
 .content {
   display: flex;
-  width: 1200px;
-  margin: 20px auto;
+  align-items: center;
+  justify-content: center;
   outline: none;
 }
 
 .panel {
-  width: 3 * ($cell-size + 2);
-  height: 10 * ($cell-size + 2);
-  margin: 20px 40px;
+  order: 1;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   justify-content: space-around;
   > div {
     display: flex;
     flex-direction: column;
     align-items: center;
-    h1 {
-      margin: 0;
-      margin-top: 5px;
-      padding: 0;
-      font-size: ($cell-size + 2);
-    }
   }
   .btn {
     text-align: center;
-    line-height: 100px;
     box-shadow: 0 2px 10px -1px black, 0 0 2px black inset;
     border-radius: 50%;
-    width: 3 * ($cell-size + 2);
-    height: 3 * ($cell-size + 2);
     margin: 0;
     padding: 0;
     background-image: url('../src/images/btn-normal.png');
@@ -106,33 +149,25 @@ h1 {
 }
 
 .board {
+  order: 2;
+  box-sizing: content-box;
   position: relative;
   background-image: url('../src/images/water.png');
   background-repeat: repeat;
-  background-size: 20px;
-  width: 10 * ($cell-size + 2);
-  height: 10 * ($cell-size + 2);
-  margin: 20px 49px;
   border: 1px solid black;
   box-shadow: 0 0 4px 1px black;
   display: flex;
   flex-wrap: wrap;
   &::before {
     content: '';
-    width: 10 * ($cell-size + 2) + 30;
-    height: 10 * ($cell-size + 2) + 30;
     position: absolute;
-    top: -15px;
-    right: -15px;
-    border-radius: 10px;
     box-shadow: 0 0 4px black inset, 0 0 3px 2px black;
     background-image: url('../src/images/border.jpg');
     background-size: cover;
     z-index: -1;
   }
   .cell {
-    width: $cell-size;
-    height: $cell-size;
+    box-sizing: border-box;
     border: 1px solid rgba(0, 0, 0, 0.3);
   }
   .darkened {
@@ -141,26 +176,15 @@ h1 {
 }
 
 .ship {
-  height: $cell-size;
   position: absolute;
   z-index: 1;
 }
 
 .v-ship {
-  transform-origin: 19px 50%;
   transform: rotate(90deg);
 }
 
-@for $i from 1 through 4 {
-  .ship-#{$i} {
-    width: $i * $cell-size;
-  }
-}
-
 .effect {
-  width: $cell-size;
-  height: $cell-size;
-  margin: 1px;
   position: absolute;
   z-index: 2;
   animation-name: shot-fx;
@@ -185,4 +209,21 @@ h1 {
 
 .draggable-mirror {
   display: none !important;
+}
+
+@include relative-sizes(6vh);
+
+@media (max-width: 180vh) {
+  @include relative-sizes(3.3vw);
+}
+
+@media (orientation: portrait) {
+  .content {
+    flex-direction: column;
+  }
+  .panel {
+    order: 3;
+    flex-direction: row;
+  }
+  @include relative-sizes(3vh);
 }

@@ -1,5 +1,5 @@
 # Battleship
-The Odin Project, Javascript Project: Build a battleship game with full test suitcase
+The Odin Project, Javascript Course: Build a battleship game with full test suitcase
 
 ## Live preview
 https://raw.githack.com/madcido/js-battleship/master/dist/index.html

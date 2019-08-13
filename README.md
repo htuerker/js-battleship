@@ -1,16 +1,13 @@
-The Odin Project - JavaScript project: Battleship
+# Battleship
+The Odin Project, Javascript Project: Build a battleship game with full test suitcase
 
-Assignment: https://www.theodinproject.com/courses/javascript/lessons/battleship
-
-Authors: <a href="https://github.com/btuerker">Burhan Tuerker</a> / <a href="https://github.com/madcido">Fabio Carmo</a>
-
-Preview: 
-
+## Live preview
 https://raw.githack.com/madcido/js-battleship/master/dist/index.html
 
-## Installation Guide
-### Prerequisities
-System dependencies:
+## Getting Started
+These instructions will get you a copy of the project up and running on your local machine.
+
+### Prerequisites
 ```
 $ node -v
   v10.15.3
@@ -22,17 +19,27 @@ $ webpack -v
   4.34.0
 ```
 
-#### Local setup
-##### Clone project
+### Installing
+Clone the project:
 ```
 $ git clone https://github.com/madcido/js-battleship.git
 $ cd ./js-battleship
 ```
-##### Install dependencies
+Install dependencies:
 ```
 $ npm install
 ```
-##### Build project
+Build the project:
 ```
 $ npm start
 ```
+
+## Running the tests
+This project has tests for models, controllers and features.
+```
+$ jest
+```
+
+## Authors
+* **<a href="https://github.com/btuerker">Burhan Tuerker</a>**
+* **<a href="https://github.com/madcido">Fabio Carmo</a>**

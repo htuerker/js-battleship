@@ -18,7 +18,7 @@ module.exports = {
       title: 'BattleshiP',
       favicon: './src/images/screw.png',
       hash: true,
-    })
+    }),
   ],
 
   module: {

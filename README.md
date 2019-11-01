@@ -1,8 +1,7 @@
 JavaScript project: Battleship Game
 
-Functionalities:
-- Allow to place ships with Drag&Drop
-- Allow to play with a computer(just randomized moves, no ai)
+- Allows placing ships with Drag & Drop
+- Allows playing against the computer(only randomized moves, no ai)
 
 ![](./preview.png)
 

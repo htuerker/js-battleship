@@ -1,5 +1,9 @@
 JavaScript project: Battleship Game
 
+Functionalities:
+- Allow to place ships with Drag&Drop
+- Allow to play with a computer(just randomized moves, no ai)
+
 ![](./preview.png)
 
 Authors: <a href="https://github.com/btuerker">Burhan Tuerker</a> / <a href="https://github.com/madcido">Fabio Carmo</a>

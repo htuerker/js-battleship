@@ -7,8 +7,7 @@ JavaScript project: Battleship Game
 
 Authors: <a href="https://github.com/btuerker">Burhan Tuerker</a> / <a href="https://github.com/madcido">Fabio Carmo</a>
 
-Live Preview:
-https://raw.githack.com/btuerker/js-battleship/dev/dist/index.html
+Live Preview: https://raw.githack.com/btuerker/js-battleship/master/dist/index.html
 
 ## Installation Guide
 ### Prerequisities
